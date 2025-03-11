@@ -1,5 +1,9 @@
 import random
 
+rangeMax = 10
+rangeMin = -10
+maxIterations = 1000
+
 
 def objectiveFunction(solution):
     score = 0
@@ -8,7 +12,7 @@ def objectiveFunction(solution):
     return score
 
 
-def vecindario(solution, min, max):
+def vecindario(solution):
     '''
     max = -1
     min = 99999
@@ -17,25 +21,26 @@ def vecindario(solution, min, max):
         min = e if e < min else min
     '''
     index = random.randint(0, len(solution) - 1)
-    solution[index] = random.randint(min, max)
+    solution[index] = random.randint(rangeMin, rangeMax)
     return solution
 
 
+def CreateSolution(n):
+    return [random.randint(rangeMin, rangeMax) for i in range(n)]
+
+
 if __name__ == '__main__':
-    initialSolution = [3, 1, 2, 5, 4]
-    xMin = -10
-    xMax = 10
-    sBest = initialSolution
+    initialSolution = CreateSolution(5)
+    sBest = initialSolution[:]
     vBest = objectiveFunction(initialSolution)
+
     iterations = 0
-    while iterations < 100 and vBest != 0:
-        newSolution = vecindario(initialSolution[:], xMin, xMax)
+
+    while iterations < maxIterations and vBest != 0:
+        newSolution = vecindario(sBest[:])
         vNewSolution = objectiveFunction(newSolution)
         if vNewSolution < vBest:
             vBest = vNewSolution
-            sBest = newSolution
-        initialSolution = newSolution
-        print(f'Solution = {initialSolution}')
-        print(f'VBest = {vBest}')
-        print(f'sBest = {sBest}')
+            sBest = newSolution[:]
+        print(f'Iteracion {iterations} Best = {sBest}\t con vo = {vBest}')
         iterations += 1
