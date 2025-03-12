@@ -88,7 +88,6 @@ if __name__ == '__main__':
     rangesIndex = 0
     for i in range(len(costPerUnitOfChange)):
         if maximization[i]:
-            pass
             energyPredicted = GetMaximizationEnergyCost(costPerUnitOfChange[i], currentValues[i], solutions[i])
             energyMin = GetMaximizationEnergyCost(costPerUnitOfChange[i], currentValues[i], ranges[rangesIndex])
             energyMax = GetMaximizationEnergyCost(costPerUnitOfChange[i], currentValues[i], ranges[rangesIndex + 1])
