@@ -94,7 +94,7 @@ class Satisfaction:
         newSatisfaction = sum(newSatisfaction)
         return newSatisfaction
 
-
+"""
 if __name__ == "__main__":
     # Static preferences: These values are not expected to change often
     config = {
@@ -146,3 +146,4 @@ if __name__ == "__main__":
     user_satisfaction = satisfaction.GetUserSatisfaction(solution)
     # Print the total user satisfaction score
     print(f"User Satisfaction: {user_satisfaction}")
+"""

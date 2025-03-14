@@ -32,14 +32,14 @@ def GetMaxEnergyCost(cost, currentValue, desiredValue):
     return totalCost
 
 
-class Satisfaction:
+class Energy:
     # Class attributes to store preferences and the current solution
     preferences = None  # Stores the preferred ranges, weights, and costs for each service
     solution = None  # Stores the current real values, optimal values, and optimization goals for each service
 
     def __init__(self, preferences):
         """
-        Initializes the Satisfaction class with the given preferences.
+        Initializes the Energy class with the given preferences.
 
         Args:
             preferences (dict): A dictionary containing the preferred ranges, weights,
@@ -57,7 +57,7 @@ class Satisfaction:
         """
         self.solution = newSolution
 
-    def GetEnergyConsumptionSatisfaction(self, newSolution):
+    def GetEnergyConsumptionGain(self, newSolution):
         """
         Calculates the energy consumption satisfaction based on the new solution.
 
@@ -93,9 +93,12 @@ class Satisfaction:
                 energyObjective = GetMinEnergyCost(cost, realValue, desiredValue)
                 energyMin = GetMinEnergyCost(cost, realValue, maxValue)
                 energyMax = GetMinEnergyCost(cost, realValue, minValue)
+            try:
+                # Calculate the normalized energy consumption satisfaction score
+                energyConsumption = round(1 - (energyMax - energyObjective) / (energyMax - energyMin), 5)
+            except ZeroDivisionError:
+                energyConsumption = 0
 
-            # Calculate the normalized energy consumption satisfaction score
-            energyConsumption = round(1 - (energyMax - energyObjective) / (energyMax - energyMin), 5)
             # Apply the service's weight to the energy consumption score
             energyConsumption *= self.preferences[service]['weight']
             # Add the weighted score to the total energy gain
@@ -103,7 +106,7 @@ class Satisfaction:
 
         return energyGain
 
-
+"""
 if __name__ == "__main__":
     # Static preferences: These values are not expected to change often
     config = {
@@ -133,7 +136,7 @@ if __name__ == "__main__":
     solution = {
         'temp': {
             'IsMaximization': False,  # Temperature should be minimized
-            'RealValue': 28,  # Current real temperature value
+            'RealValue': 15,  # Current real temperature value
             'OptValue': 18,  # Desired optimal temperature value
         },
         'humidity': {
@@ -149,13 +152,14 @@ if __name__ == "__main__":
         'light': {
             'IsMaximization': True,  # Light intensity should be maximized
             'RealValue': 132,  # Current real light intensity value
-            'OptValue': 200,  # Desired optimal light intensity value
-        },
+            'OptValue': 500,  # Desired optimal light intensity value
+        }
     }
 
-    # Instantiate the Satisfaction class with the static preferences
-    satisfaction = Satisfaction(config)
-    # Calculate the energy consumption satisfaction based on the dynamic solution
-    energy_satisfaction = satisfaction.GetEnergyConsumptionSatisfaction(solution)
-    # Print the total energy consumption satisfaction score
-    print(f"Energy Consumption Satisfaction: {energy_satisfaction}")
+    # Instantiate the Energy class with the static preferences
+    satisfaction = Energy(config)
+    # Calculate the energy consumption gain based on the dynamic solution
+    energy_satisfaction = satisfaction.GetEnergyConsumptionGain(solution)
+    # Print the total energy consumption gain
+    print(f"Energy Consumption Gain: {energy_satisfaction}")
+"""
