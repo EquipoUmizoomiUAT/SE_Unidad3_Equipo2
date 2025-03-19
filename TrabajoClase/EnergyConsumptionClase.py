@@ -95,7 +95,7 @@ class Energy:
                 energyMax = GetMinEnergyCost(cost, realValue, minValue)
             try:
                 # Calculate the normalized energy consumption satisfaction score
-                energyConsumption = round(1 - (energyMax - energyObjective) / (energyMax - energyMin), 5)
+                energyConsumption = round(1 - (energyObjective - energyMin) / (energyMax - energyMin), 5)
             except ZeroDivisionError:
                 energyConsumption = 0
 

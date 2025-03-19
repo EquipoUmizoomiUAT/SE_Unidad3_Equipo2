@@ -3,15 +3,15 @@ class Satisfaction:
     preferences = None  # Stores the preferred ranges, weights, and costs for each service
     solution = None  # Stores the current optimal values and optimization goals for each service
 
-    def __init__(self, preferences):
+    def __init__(self, config):
         """
         Initializes the Satisfaction class with the given preferences.
 
         Args:
-            preferences (dict): A dictionary containing the preferred ranges, weights,
+            config (dict): A dictionary containing the preferred ranges, weights,
                                 and change costs for each service.
         """
-        self.preferences = preferences
+        self.preferences = config
 
     def SetSolution(self, newSolution):
         """

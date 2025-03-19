@@ -2,8 +2,8 @@ import SatisfactionClase as SatisfactionC
 import EnergyConsumptionClase as EnergyC
 
 if __name__ == '__main__':
-    alpha = 0.2
-    beta = 0.8
+    alpha = 0.5
+    beta = 0.5
 
     # Static preferences: These values are not expected to change often
     config = {
