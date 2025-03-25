@@ -1,10 +1,9 @@
 import copy
 import random
-import EnergyConsumptionClase as Energy
-import SatisfactionClase as Satisfaction
+from TrabajoClase import EnergyConsumptionClase as Energy
+from TrabajoClase import SatisfactionClase as Satisfaction
 
-maxLocalSearchIterations = 1000
-maxIteratedLocalSearchIterations = 100
+maxIterations = 1000
 config = {
         'temp': {
             'range': [18, 26],  # Preferred temperature range
@@ -27,8 +26,8 @@ config = {
             'changeCost': 5,  # Cost of changing the light intensity
         },
     }
-alpha = 0.5
-beta = 0.5
+alpha = 0.75
+beta = 0.25
 energy = Energy.Energy(config)
 satisfaction = Satisfaction.Satisfaction(config)
 
@@ -43,21 +42,8 @@ def ObjectiveFunction(solution):
 def NeighborSolution(solution):
     service = random.choice(list(solution.keys()))
     minimum, maximum = config[service]['range']
-    newPrediction = random.randint(minimum, maximum)
+    newPrediction = random.uniform(minimum, maximum)
     solution[service]['OptValue'] = newPrediction
-    return solution
-
-
-def Perturbation(solution):
-    for service in solution.keys():
-        minimum, maximum = config[service]['range']
-        oldValue = solution[service]['OptValue']
-        newValue = oldValue + random.randint(-10, 10)
-        if newValue > maximum:
-            newValue = maximum
-        if newValue < minimum:
-            newValue = minimum
-        solution[service]['OptValue'] = newValue
     return solution
 
 
@@ -66,22 +52,22 @@ def CreateSolution():
         'temp': {
             'IsMaximization': False,  # Temperature should be minimized
             'RealValue': 15,  # Current real temperature value
-            'OptValue': random.randint(config['temp']['range'][0], config['temp']['range'][1]),  # Desired optimal temperature value
+            'OptValue': random.uniform(config['temp']['range'][0], config['temp']['range'][1]),  # Desired optimal temperature value
         },
         'humidity': {
             'IsMaximization': False,  # Humidity should be minimized
             'RealValue': 70,  # Current real humidity value
-            'OptValue': random.randint(config['humidity']['range'][0], config['humidity']['range'][1]),  # Desired optimal humidity value
+            'OptValue': random.uniform(config['humidity']['range'][0], config['humidity']['range'][1]),  # Desired optimal humidity value
         },
         'noise': {
             'IsMaximization': False,  # Noise level should be minimized
             'RealValue': 82,  # Current real noise level value
-            'OptValue': random.randint(config['noise']['range'][0], config['noise']['range'][1]),  # Desired optimal noise level value
+            'OptValue': random.uniform(config['noise']['range'][0], config['noise']['range'][1]),  # Desired optimal noise level value
         },
         'light': {
             'IsMaximization': True,  # Light intensity should be maximized
             'RealValue': 132,  # Current real light intensity value
-            'OptValue': random.randint(config['light']['range'][0], config['light']['range'][1]),  # Desired optimal light intensity value
+            'OptValue': random.uniform(config['light']['range'][0], config['light']['range'][1]),  # Desired optimal light intensity value
         }
     }
     return solution
@@ -92,26 +78,21 @@ if __name__ == '__main__':
     sBest = copy.deepcopy(initialSolution)
     vBest = ObjectiveFunction(initialSolution)
 
-    localSearchIterations = 0
-    iteratedLocalSearchIterations = 0
+    iterations = 0
 
-
-    while iteratedLocalSearchIterations < maxIteratedLocalSearchIterations:
-        while localSearchIterations < maxLocalSearchIterations and vBest != 1:
-            newSolution = NeighborSolution(copy.deepcopy(sBest))
-            vNewSolution = ObjectiveFunction(newSolution)
-            if vNewSolution > vBest:
-                vBest = vNewSolution
-                sBest = copy.deepcopy(newSolution)
-            localSearchIterations += 1
-
-        tempSolution = Perturbation(newSolution)
-        vNewSolution = ObjectiveFunction(tempSolution)
+    while iterations < maxIterations and vBest != 1:
+        newSolution = NeighborSolution(copy.deepcopy(sBest))
+        vNewSolution = ObjectiveFunction(newSolution)
         if vNewSolution > vBest:
             vBest = vNewSolution
             sBest = copy.deepcopy(newSolution)
-        print(f"Iteration {localSearchIterations}:")
+        print(f"Iteration {iterations}:")
         for service, values in sBest.items():
             print(f"  {service}: OptValue = {values['OptValue']}")
         print(f"  Objective Function Score: {vBest}\n")
-        iteratedLocalSearchIterations += 1
+        iterations += 1
+
+    print(f"Final Iteration: {iterations}:")
+    for service, values in sBest.items():
+        print(f"  {service}: OptValue = {values['OptValue']}")
+    print(f" Best Objective Function Score: {vBest}\n")
