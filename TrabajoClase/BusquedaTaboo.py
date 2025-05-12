@@ -139,7 +139,6 @@ if __name__ == '__main__':
             tabooLibrary = tabooCopy.copy()
             localSearchIterations += 1
 
-
         # Perturbation step
         newSolution = Perturbation(newSolution)
         vNewSolution = ObjectiveFunction(newSolution)

@@ -3,48 +3,13 @@ import random
 from .. import ObjectiveFunction
 from .. import GlobalConfig
 
-# Define the maximum number of iterations for local search and iterated local search
-maxLocalSearchIterations = 1000
-maxIteratedLocalSearchIterations = 100
-
-# Configuration for environmental parameters (temperature, humidity, noise, light)
 config = GlobalConfig.GetGlobalConfig()
-
 tabooLibrary = dict()
 tabooTime = 2
 
-# Weights for satisfaction and energy gain in the objective function
-alpha = 0.60  # Weight for satisfaction
-beta = 0.40   # Weight for energy gain
-
-# Generate a neighbor solution by randomly changing one parameter
-def NeighborSolution(solution):
-    """
-    Creates a neighboring solution by randomly changing the optimal value of one service.
-    """
-    service = random.choice(list(solution.keys())) #Choose a random service (temp, humidity, etc.)
-    while service in tabooLibrary:
-        service = random.choice(list(solution.keys()))  # Choose a random service (temp, humidity, etc.)
-    minimum, maximum = config[service]['range'] #Get the range of the chosen service
-    newPrediction = random.uniform(minimum, maximum) #Generate a new random value within the range
-    solution[service]['OptValue'] = newPrediction #Update the optimal value in the solution
-    return solution, service
-
-# Perturb a solution by randomly changing all parameters
-def Perturbation(solution):
-    """
-    Perturbs a solution by randomly changing the optimal value of all services.
-    """
-    for service in solution.keys(): #Loop through all services
-        minimum, maximum = config[service]['range'] #Get the range of the service
-        oldValue = solution[service]['OptValue'] #Get the old optimal value
-        newValue = oldValue + random.uniform(-10, 10) #Generate a new value by adding a random offset
-        if newValue > maximum: #Ensure the new value is within the range
-            newValue = maximum
-        if newValue < minimum:
-            newValue = minimum
-        solution[service]['OptValue'] = newValue #Update the optimal value in the solution
-    return solution
+# Define the maximum number of iterations for local search and iterated local search
+maxLocalSearchIterations = 1000
+maxIteratedLocalSearchIterations = 100
 
 # Create an initial solution with random optimal values
 def CreateSolution():
@@ -75,12 +40,43 @@ def CreateSolution():
     }
     return solution
 
-# Main execution block
+# Generate a neighbor solution by randomly changing one parameter
+def NeighborSolution(solution):
+    """
+    Creates a neighboring solution by randomly changing the optimal value of one service.
+    """
+    service = random.choice(list(solution.keys())) #Choose a random service (temp, humidity, etc.)
+    while service in tabooLibrary:
+        service = random.choice(list(solution.keys()))  # Choose a random service (temp, humidity, etc.)
+    minimum, maximum = config[service]['range'] #Get the range of the chosen service
+    newPrediction = random.uniform(minimum, maximum) #Generate a new random value within the range
+    solution[service]['OptValue'] = newPrediction #Update the optimal value in the solution
+    return solution, service
+
+
+# Perturb a solution by randomly changing all parameters
+def Perturbation(solution):
+    """
+    Perturbs a solution by randomly changing the optimal value of all services.
+    """
+    for service in solution.keys(): #Loop through all services
+        minimum, maximum = config[service]['range'] #Get the range of the service
+        oldValue = solution[service]['OptValue'] #Get the old optimal value
+        newValue = oldValue + random.uniform(-10, 10) #Generate a new value by adding a random offset
+        if newValue > maximum: #Ensure the new value is within the range
+            newValue = maximum
+        if newValue < minimum:
+            newValue = minimum
+        solution[service]['OptValue'] = newValue #Update the optimal value in the solution
+    return solution
+
+
 if __name__ == '__main__':
-    initialSolution = CreateSolution() #Create an initial random solution
     OB = ObjectiveFunction.ObjectiveFunction()
-    sBest = copy.deepcopy(initialSolution) #Copy the initial solution to the best solution
-    vBest = OB.CalculateSatisfaction(initialSolution) #Calculate the objective function value of the initial solution
+
+    initialSolution = CreateSolution()  # Create an initial random solution
+    sBest = copy.deepcopy(initialSolution)  # Copy the initial solution to the best solution
+    vBest = OB.CalculateSatisfaction(initialSolution)  # Calculate the objective function value of the initial solution
     newSolution = copy.deepcopy(initialSolution)
     localSearchIterations = 0
     iteratedLocalSearchIterations = 0
@@ -88,10 +84,10 @@ if __name__ == '__main__':
     # Main loop for iterated local search
     while iteratedLocalSearchIterations < maxIteratedLocalSearchIterations:
         # Local search loop
-        while localSearchIterations < maxLocalSearchIterations and vBest != 1: #Continue local search until max iterations or optimal solution
-            newSolution, updatedService = NeighborSolution(newSolution) #Generate a neighbor solution
-            vNewSolution = OB.CalculateSatisfaction(newSolution) #Calculate the objective function value of the neighbor solution
-            if vNewSolution > vBest: #If the neighbor solution is better, update the best solution
+        while localSearchIterations < maxLocalSearchIterations and vBest != 1:  # Continue local search until max iterations or optimal solution
+            newSolution, updatedService = NeighborSolution(newSolution)  # Generate a neighbor solution
+            vNewSolution = OB.CalculateSatisfaction(newSolution)  # Calculate the objective function value of the neighbor solution
+            if vNewSolution > vBest:  # If the neighbor solution is better, update the best solution
                 tabooLibrary[updatedService] = tabooTime + 1
                 vBest = vNewSolution
                 sBest = copy.deepcopy(newSolution)
@@ -104,7 +100,6 @@ if __name__ == '__main__':
                     tabooCopy[service] = serviceTabooTime
             tabooLibrary = tabooCopy.copy()
             localSearchIterations += 1
-
 
         # Perturbation step
         newSolution = Perturbation(newSolution)
