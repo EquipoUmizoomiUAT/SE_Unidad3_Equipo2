@@ -1,4 +1,4 @@
-import ServiceSatisfacion as SatisfactionC
+import ServiceSatisfaction as SatisfactionC
 import EnergySatisfacion as EnergyC
 import GlobalConfig as Config
 import copy
