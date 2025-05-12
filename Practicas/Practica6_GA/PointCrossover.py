@@ -12,8 +12,10 @@ def PointCrossover(parentsVector, mutationChance):
     while parentIndex < len(parentsVector):
         crossPoint = random.randint(0, len(parentsVector[0]) - 1)
 
-        parent1 = list(parentsVector[parentIndex])
-        parent2 = list(parentsVector[parentIndex + 1])
+        testo = parentsVector[parentIndex]
+
+        parent1 = list(parentsVector[parentIndex].items())
+        parent2 = list(parentsVector[parentIndex + 1].items())
 
         child1 = dict(parent1[:crossPoint] + parent2[crossPoint:])
         child2 = dict(parent2[:crossPoint] + parent1[crossPoint:])

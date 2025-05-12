@@ -12,20 +12,21 @@ def StartGenetic(populationSize, mutationChance, generationAttemps, parentNumber
     OB = ObjectiveFunction.ObjectiveFunction()
 
     for generation in range(generationAttemps):
+        print(generation)
+        scoresVector = [OB.CalculateSatisfaction(e) for e in populationVector]
+        parentsVector = BinaryTournament.SelectParents(populationVector, scoresVector, parentNumber)
+        childrenVector, childrenScores = PointCrossover.PointCrossover(populationVector, mutationChance)
+        populationVector.extend(childrenVector)
+        scoresVector.extend(childrenScores)
+        populationVector, scoresVector = Selection.Selection(populationVector, scoresVector, populationSize)
+        score = max(scoresVector)
         if score == lastScore:
             gensWOUpgrade += 1
             if gensWOUpgrade >= gensWOUpgradeLimit:
                 break
         else:
             gensWOUpgrade = 0
-
-        scoresVector = [OB.CalculateSatisfaction(e) for e in populationVector]
-        parentsVector = BinaryTournament.SelectParents(populationVector, scoresVector, parentNumber)
-        childrenVector, childrenScores = PointCrossover.PointCrossover(populationVector, mutationChance)
-        populationVector.extend(childrenVector)
-        scoresVector.extend(childrenScores)
-        populationVector, scoresVector = Selection.SelectionSelection(populationVector, scoresVector, populationSize)
-        score = max(scoresVector)
+        lastScore = score
 
     bestIndex = scoresVector.index(score)
     return populationVector[bestIndex]
