@@ -1,8 +1,8 @@
 import BinaryTournament, PointCrossover, Selection, InitialPopulation
-from .. import ObjectiveFunction
+from Practicas import ObjectiveFunction
 
 def StartGenetic(populationSize, mutationChance, generationAttemps, parentNumber):
-    populationVector = InitialPopulation.GeneratePopulation(populationSize)
+    populationVector = InitialPopulation.GetInitialPopulation(populationSize)
     scoresVector = []
     generation = 0
     score = -1

@@ -1,6 +1,6 @@
 import copy
 import random
-from .. import ObjectiveFunction, GlobalConfig
+from Practicas import ObjectiveFunction, GlobalConfig
 
 rangeMax = 10
 rangeMin = -10
@@ -65,6 +65,6 @@ if __name__ == '__main__':
         vNewSolution = OB.CalculateSatisfaction(newSolution)
         if vNewSolution < vBest:
             vBest = vNewSolution
-            sBest = newSolution[:]
+            sBest = copy.deepcopy(newSolution)
         print(f'Iteracion {iterations} Best = {sBest}\t con vo = {vBest}')
         iterations += 1

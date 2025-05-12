@@ -1,7 +1,6 @@
 import copy
 import random
-from .. import ObjectiveFunction
-from .. import GlobalConfig
+from Practicas import ObjectiveFunction, GlobalConfig
 
 # Define the maximum number of iterations for local search and iterated local search
 maxLocalSearchIterations = 1000

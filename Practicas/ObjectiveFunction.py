@@ -1,6 +1,8 @@
-import ServiceSatisfaction as SatisfactionC
-import EnergySatisfacion as EnergyC
-import GlobalConfig as Config
+from idlelib.debugobj_r import remote_object_tree_item
+
+from Practicas import ServiceSatisfaction as SatisfactionC
+from Practicas import EnergySatisfacion as EnergyC
+from Practicas import GlobalConfig as Config
 import copy
 
 class ObjectiveFunction:
@@ -12,8 +14,8 @@ class ObjectiveFunction:
 
 
     def __init__(self):
-        alpha, beta = Config.GetSatisfactionWeights()
-        config = Config.GetGlobalConfig()
+        self.alpha, self.beta = Config.GetSatisfactionWeights()
+        self.config = Config.GetGlobalConfig()
 
 
     def CalculateSatisfaction(self, solution):
@@ -22,11 +24,9 @@ class ObjectiveFunction:
         energy = EnergyC.Energy(self.config)
 
         satisfactionValue = satisfaction.GetUserSatisfaction(self.solution)
-        print(f'Satisfacción Servicios: {satisfactionValue}')
 
         energyGain = energy.GetEnergyConsumptionGain(self.solution)
-        print(f'Satisfacción Energia: {energyGain}')
 
         solutionScore = satisfactionValue * self.alpha + energyGain * self.beta
 
-        print(f'Puntaje de la solucion: {solutionScore}')
+        return solutionScore

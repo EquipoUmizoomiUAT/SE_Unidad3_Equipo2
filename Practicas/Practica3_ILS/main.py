@@ -1,6 +1,6 @@
 import copy
 import random
-from .. import ObjectiveFunction, GlobalConfig
+from Practicas import ObjectiveFunction, GlobalConfig
 
 rangeMax = 10
 rangeMin = -10
@@ -86,11 +86,11 @@ if __name__ == '__main__':
                 vBest = vTempSolution
                 tempSolution = copy.deepcopy(tempSolution)
             iterations += 1
-    tempSolution = Perturbation(copy.deepcopy(tempSolution))
-    vTempSolution = OB.CalculateSatisfaction(tempSolution)
-    if vTempSolution < vBest:
-        vBest = vTempSolution
-        tempSolution = copy.deepcopy(tempSolution)
+        tempSolution = Perturbation(copy.deepcopy(tempSolution))
+        vTempSolution = OB.CalculateSatisfaction(tempSolution)
+        if vTempSolution < vBest:
+            vBest = vTempSolution
+            tempSolution = copy.deepcopy(tempSolution)
 
-    print(f'Iteracion {iterations} Best = {tempSolution}\t con vo = {vTempSolution}')
-    itILS += 1
+        print(f'Iteracion {iterations} Best = {tempSolution}\t con vo = {vTempSolution}')
+        itILS += 1

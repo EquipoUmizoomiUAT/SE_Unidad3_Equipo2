@@ -1,7 +1,6 @@
 import copy
 import random
-from .. import ObjectiveFunction
-from .. import GlobalConfig
+from Practicas import ObjectiveFunction, GlobalConfig
 
 config = GlobalConfig.GetGlobalConfig()
 tabooLibrary = dict()
