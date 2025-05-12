@@ -8,24 +8,24 @@ maxIterations = 1000  # Maximum number of iterations for the optimization loop
 # Configuration dictionary for environmental parameters
 config = {
     'temp': {
-        'range': [18, 26],  # Preferred temperature range in degrees
-        'weight': 0.25,  # Importance of temperature in the overall satisfaction score
-        'changeCost': 5,  # Cost associated with changing the temperature
+        'range': [18, 26],  # Preferred temperature range
+        'weight': 0.70,  # Importance of temperature in overall satisfaction
+        'changeCost': 5,  # Cost of changing the temperature
     },
     'humidity': {
-        'range': [40, 60],  # Preferred humidity range in percentage
-        'weight': 0.25,  # Importance of humidity in the overall satisfaction score
-        'changeCost': 5,  # Cost associated with changing the humidity
+        'range': [40, 60],  # Preferred humidity range
+        'weight': 0.10,  # Importance of humidity in overall satisfaction
+        'changeCost': 5,  # Cost of changing the humidity
     },
     'noise': {
-        'range': [0, 60],  # Preferred noise level range in decibels
-        'weight': 0.25,  # Importance of noise level in the overall satisfaction score
-        'changeCost': 5,  # Cost associated with changing the noise level
+        'range': [0, 60],  # Preferred noise level range
+        'weight': 0.04,  # Importance of noise level in overall satisfaction
+        'changeCost': 5,  # Cost of changing the noise level
     },
     'light': {
-        'range': [200, 500],  # Preferred light intensity range in lux
-        'weight': 0.25,  # Importance of light intensity in the overall satisfaction score
-        'changeCost': 5,  # Cost associated with changing the light intensity
+        'range': [200, 500],  # Preferred light intensity range
+        'weight': 0.16,  # Importance of light intensity in overall satisfaction
+        'changeCost': 5,  # Cost of changing the light intensity
     },
 }
 
@@ -106,12 +106,13 @@ if __name__ == '__main__':
     initialSolution = CreateSolution()  # Create an initial random solution
     sBest = copy.deepcopy(initialSolution)  # Initialize the best solution with the initial solution
     vBest = ObjectiveFunction(initialSolution)  # Calculate the objective function value of the initial solution
+    newSolution = copy.deepcopy(initialSolution)
 
     iterations = 0  # Initialize iteration counter
 
     # Main optimization loop
     while iterations < maxIterations and vBest != 1:  # Continue until max iterations or perfect score is reached
-        newSolution = NeighborSolution(copy.deepcopy(sBest))  # Generate a neighboring solution
+        newSolution = NeighborSolution(copy.deepcopy(newSolution))  # Generate a neighboring solution
         vNewSolution = ObjectiveFunction(newSolution)  # Calculate the objective function value of the new solution
 
         # Update the best solution if the new solution is better

@@ -11,29 +11,29 @@ maxIteratedLocalSearchIterations = 100
 config = {
     'temp': {
         'range': [18, 26],  # Preferred temperature range
-        'weight': 0.25,  # Importance of temperature in overall satisfaction
-        'changeCost': 5,  # Cost of changing the temperature
+        'weight': 0.70,  # Importance of temperature in overall satisfaction
+        'changeCost': 30,  # Cost of changing the temperature
     },
     'humidity': {
         'range': [40, 60],  # Preferred humidity range
-        'weight': 0.25,  # Importance of humidity in overall satisfaction
-        'changeCost': 5,  # Cost of changing the humidity
+        'weight': 0.10,  # Importance of humidity in overall satisfaction
+        'changeCost': 20,  # Cost of changing the humidity
     },
     'noise': {
         'range': [0, 60],  # Preferred noise level range
-        'weight': 0.25,  # Importance of noise level in overall satisfaction
-        'changeCost': 5,  # Cost of changing the noise level
+        'weight': 0.04,  # Importance of noise level in overall satisfaction
+        'changeCost': 10,  # Cost of changing the noise level
     },
     'light': {
         'range': [200, 500],  # Preferred light intensity range
-        'weight': 0.25,  # Importance of light intensity in overall satisfaction
-        'changeCost': 5,  # Cost of changing the light intensity
+        'weight': 0.16,  # Importance of light intensity in overall satisfaction
+        'changeCost': 50,  # Cost of changing the light intensity
     },
 }
 
 # Weights for satisfaction and energy gain in the objective function
-alpha = 0.75  # Weight for satisfaction
-beta = 0.25   # Weight for energy gain
+alpha = 0.60  # Weight for satisfaction
+beta = 0.40   # Weight for energy gain
 
 # Initialize energy consumption and satisfaction classes with the given configuration
 energy = Energy.Energy(config)
@@ -68,7 +68,11 @@ def Perturbation(solution):
     for service in solution.keys(): #Loop through all services
         minimum, maximum = config[service]['range'] #Get the range of the service
         oldValue = solution[service]['OptValue'] #Get the old optimal value
-        newValue = oldValue + random.uniform(-10, 10) #Generate a new value by adding a random offset
+        rangeDifference = maximum - minimum
+        newValue = rangeDifference * .5
+        if random.random() < 0.5:
+            newValue = newValue - rangeDifference
+        newValue = newValue + rangeDifference
         if newValue > maximum: #Ensure the new value is within the range
             newValue = maximum
         if newValue < minimum:
@@ -84,22 +88,22 @@ def CreateSolution():
     solution = {
         'temp': {
             'IsMaximization': False,  # Temperature should be minimized
-            'RealValue': 15,  # Current real temperature value
+            'RealValue': random.uniform(config['temp']['range'][0], 2*config['temp']['range'][1]),  # Current real temperature value
             'OptValue': random.uniform(config['temp']['range'][0], config['temp']['range'][1]),  # Desired optimal temperature value
         },
         'humidity': {
             'IsMaximization': False,  # Humidity should be minimized
-            'RealValue': 70,  # Current real humidity value
+            'RealValue': random.uniform(config['humidity']['range'][0], 2*config['humidity']['range'][1]),  # Current real humidity value
             'OptValue': random.uniform(config['humidity']['range'][0], config['humidity']['range'][1]),  # Desired optimal humidity value
         },
         'noise': {
             'IsMaximization': False,  # Noise level should be minimized
-            'RealValue': 82,  # Current real noise level value
+            'RealValue': random.uniform(config['noise']['range'][0], 2*config['noise']['range'][1]),  # Current real noise level value
             'OptValue': random.uniform(config['noise']['range'][0], config['noise']['range'][1]),  # Desired optimal noise level value
         },
         'light': {
             'IsMaximization': True,  # Light intensity should be maximized
-            'RealValue': 132,  # Current real light intensity value
+            'RealValue': random.uniform(config['light']['range'][0], config['light']['range'][1]),  # Current real light intensity value
             'OptValue': random.uniform(config['light']['range'][0], config['light']['range'][1]),  # Desired optimal light intensity value
         }
     }

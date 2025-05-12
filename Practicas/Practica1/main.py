@@ -24,7 +24,7 @@ config = {
             'range': [200, 500],  # Preferred light intensity range
             'weight': 0.25,  # Importance of light intensity in the overall satisfaction
             'changeCost': 5,  # Cost of changing the light intensity
-        },
+        }
     }
 alpha = 0.75
 beta = 0.25
