@@ -1,5 +1,5 @@
 import random
-import Mutation
+from Practicas.Practica6_GA import Mutation
 from Practicas import ObjectiveFunction
 
 def PointCrossover(parentsVector, mutationChance):
@@ -23,8 +23,11 @@ def PointCrossover(parentsVector, mutationChance):
         children.append(child1)
         children.append(child2)
 
-        childrenScores.append(OB.CalculateSatisfaction(child1))
-        childrenScores.append(OB.CalculateSatisfaction(child2))
+        scoreChild1, *_ = OB.CalculateSatisfaction(child1)
+        scoreChild2, *_ = OB.CalculateSatisfaction(child2)
+
+        childrenScores.append(scoreChild1)
+        childrenScores.append(scoreChild2)
 
         parentIndex += 2
 

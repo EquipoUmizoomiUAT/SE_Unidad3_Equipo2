@@ -49,20 +49,66 @@ def CreateSolution():
     return solution
 
 
+def CreateSolutionVA(va):
+    """
+    Creates an initial solution with random optimal values for each service.
+    """
+    solution = {
+        'temp': {
+            'IsMaximization': False,  # Temperature should be minimized
+            'RealValue': va[0],  # Current real temperature value
+            'OptValue': random.uniform(config['temp']['range'][0], config['temp']['range'][1]),  # Desired optimal temperature value
+        },
+        'humidity': {
+            'IsMaximization': False,  # Humidity should be minimized
+            'RealValue': va[1],  # Current real humidity value
+            'OptValue': random.uniform(config['humidity']['range'][0], config['humidity']['range'][1]),  # Desired optimal humidity value
+        },
+        'noise': {
+            'IsMaximization': False,  # Noise level should be minimized
+            'RealValue': va[2],  # Current real noise level value
+            'OptValue': random.uniform(config['noise']['range'][0], config['noise']['range'][1]),  # Desired optimal noise level value
+        },
+        'light': {
+            'IsMaximization': True,  # Light intensity should be maximized
+            'RealValue': va[3],  # Current real light intensity value
+            'OptValue': random.uniform(config['light']['range'][0], config['light']['range'][1]),  # Desired optimal light intensity value
+        }
+    }
+    return solution
 
-if __name__ == '__main__':
 
-    initialSolution = CreateSolution()
+def runLS(va):
+    initialSolution = CreateSolutionVA(va)
     OB = ObjectiveFunction.ObjectiveFunction()
 
     sBest = copy.deepcopy(initialSolution)
-    vBest = OB.CalculateSatisfaction(initialSolution)
+    vBest, serviceSatis, energySatis = OB.CalculateSatisfaction(initialSolution)
 
     iterations = 0
 
     while iterations < maxIterations and vBest != 0:
         newSolution = NeighborSolution(copy.deepcopy(sBest))
-        vNewSolution = OB.CalculateSatisfaction(newSolution)
+        vNewSolution, serviceSatis, energySatis = OB.CalculateSatisfaction(newSolution)
+        if vNewSolution < vBest:
+            vBest = vNewSolution
+            sBest = copy.deepcopy(newSolution)
+        iterations += 1
+
+    return vBest, serviceSatis, energySatis, sBest
+
+if __name__ == '__main__':
+    initialSolution = CreateSolution()
+    OB = ObjectiveFunction.ObjectiveFunction()
+
+    sBest = copy.deepcopy(initialSolution)
+    vBest, *_ = OB.CalculateSatisfaction(initialSolution)
+
+    iterations = 0
+
+    while iterations < maxIterations and vBest != 0:
+        newSolution = NeighborSolution(copy.deepcopy(sBest))
+        vNewSolution, *_ = OB.CalculateSatisfaction(newSolution)
         if vNewSolution < vBest:
             vBest = vNewSolution
             sBest = copy.deepcopy(newSolution)

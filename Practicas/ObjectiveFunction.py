@@ -23,10 +23,10 @@ class ObjectiveFunction:
         satisfaction = SatisfactionC.Satisfaction(self.config)
         energy = EnergyC.Energy(self.config)
 
-        satisfactionValue = satisfaction.GetUserSatisfaction(self.solution)
+        serviceSatisfaction = satisfaction.GetUserSatisfaction(self.solution)
 
-        energyGain = energy.GetEnergyConsumptionGain(self.solution)
+        energySatisfaction = energy.GetEnergyConsumptionGain(self.solution)
 
-        solutionScore = satisfactionValue * self.alpha + energyGain * self.beta
+        solutionScore = serviceSatisfaction * self.alpha + energySatisfaction * self.beta
 
-        return solutionScore
+        return solutionScore, serviceSatisfaction, energySatisfaction
