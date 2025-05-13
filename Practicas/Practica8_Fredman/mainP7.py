@@ -39,6 +39,11 @@ res = stats.friedmanchisquare(*[pivot_df[col] for col in pivot_df.columns])
 print("\nResultado Prueba de Friedman:")
 print(res)
 
+#Ho = hipotesis nula...
+# NO EXISTE DIFERENCIA ESTADISTICA ENTRE LAS MUESTRAS (GRUPOS)
+#Ha = hipostesis alternativa
+# EXISTE DIFERENCIA ESTADISTICA ENTRE LAS MUESTRAS (GRUPOS)
+
 # Interpretar resultado
 alpha = 0.05
 if res.pvalue < alpha:
