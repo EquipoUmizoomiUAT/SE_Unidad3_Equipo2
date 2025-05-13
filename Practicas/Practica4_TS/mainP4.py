@@ -116,6 +116,8 @@ def CreateSolutionVA(va):
 
 
 def runTS(va):
+    global tabooLibrary
+
     initialSolution = CreateSolutionVA(va)  # Create an initial random solution
     OB = ObjectiveFunction.ObjectiveFunction()
     sBest = copy.deepcopy(initialSolution)  # Copy the initial solution to the best solution

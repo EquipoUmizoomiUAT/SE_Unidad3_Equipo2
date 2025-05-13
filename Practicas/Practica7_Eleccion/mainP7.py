@@ -8,7 +8,7 @@ from Practicas.Practica6_GA import mainP6 as p6
 
 
 def RunHeuristic(vaVector, heuristicName, function, finalTable):
-    for vaSet, vector in enumerate(tqdm(vaVector, desc=f"Processing {heuristicName}...")):
+    for vaSet, vector in enumerate(tqdm(vaVector, desc=f"Procesando {heuristicName}...")):
         for execution in range(1, 31):
             VA_Temp, VA_Hum, VA_Noise, VA_Light = vector
             satisfaction, satisfactionS, satisfactionE, solution = function(vector)

@@ -109,6 +109,8 @@ def Perturbation(solution):
     return solution
 
 def runSA(va):
+    global tabooLibrary
+
     OB = ObjectiveFunction.ObjectiveFunction()
 
     initialSolution = CreateSolutionVA(va)  # Create an initial random solution

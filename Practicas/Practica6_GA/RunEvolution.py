@@ -1,5 +1,6 @@
 from Practicas.Practica6_GA import BinaryTournament, PointCrossover, Selection, InitialPopulation
 from Practicas import ObjectiveFunction
+from tqdm import tqdm
 
 
 def StartGenetic(populationSize, mutationChance, generationAttemps, parentNumber):
@@ -12,9 +13,9 @@ def StartGenetic(populationSize, mutationChance, generationAttemps, parentNumber
     gensWOUpgradeLimit = 50
     OB = ObjectiveFunction.ObjectiveFunction()
 
-    for generation in range(generationAttemps):
+    for generation in tqdm(range(generationAttemps), desc="Procesando Generaciones del Gentico..."):
         print(generation)
-        scoresVector = [OB.CalculateSatisfaction(e) for e in populationVector]
+        scoresVector = [OB.CalculateSatisfaction(e)[0] for e in populationVector]
         parentsVector = BinaryTournament.SelectParents(populationVector, scoresVector, parentNumber)
         childrenVector, childrenScores = PointCrossover.PointCrossover(populationVector, mutationChance)
         populationVector.extend(childrenVector)
@@ -33,8 +34,8 @@ def StartGenetic(populationSize, mutationChance, generationAttemps, parentNumber
     return populationVector[bestIndex]
 
 
-def StartGeneticP7(populationSize, mutationChance, generationAttemps, parentNumber):
-    populationVector = InitialPopulation.GetInitialPopulationP7(populationSize)
+def StartGeneticP7(populationSize, mutationChance, generationAttemps, parentNumber, va):
+    populationVector = InitialPopulation.GetInitialPopulationP7(populationSize ,va)
     scoresVector = []
     generation = 0
     score = -1
@@ -44,8 +45,7 @@ def StartGeneticP7(populationSize, mutationChance, generationAttemps, parentNumb
     OB = ObjectiveFunction.ObjectiveFunction()
 
     for generation in range(generationAttemps):
-        print(generation)
-        scoresVector = [OB.CalculateSatisfaction(e) for e in populationVector]
+        scoresVector = [OB.CalculateSatisfaction(e)[0] for e in populationVector]
         parentsVector = BinaryTournament.SelectParents(populationVector, scoresVector, parentNumber)
         childrenVector, childrenScores = PointCrossover.PointCrossover(populationVector, mutationChance)
         populationVector.extend(childrenVector)
